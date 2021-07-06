@@ -1,0 +1,77 @@
+video {
+    transform: rotateY(180deg); 
+}
+
+#appname{
+    color:cornsilk;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+}
+#appnamebg{
+    background:linear-gradient(to bottom, #262168 -6%, #5353bb 90%);
+    margin-top: 0%;
+    padding-top: 0%;
+    border: 2px solid #767cd3;
+    background-size: cover;
+}
+#bottomline{
+    background:linear-gradient(to bottom, #8d87e4 -3%, #b9b9e2 100%);
+    position: -webkit-sticky;
+    position: sticky;
+    bottom:0;
+    border: 2px solid #767cd3;
+}
+.select {
+    height: 30px;
+}
+
+.h-90 {
+    height: 90% !important;
+}
+
+.h-10 {
+    height: 10% !important;
+}
+
+input[type=checkbox]:checked + label {
+    color:whitesmoke;  
+}
+.centered {
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #b1ade0;
+}
+#startbg{
+    background:linear-gradient(to bottom, #e7e6f1 -6%, #d7d7e6 90%);
+}
+#ending{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align:center;
+}
+#joiningdiv{
+    text-align: center;
+}
+#joiningbtn{
+  background-color: #b1ade0; /* Green */
+  border: none;
+  color: white;
+  padding: 7px 27px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+}
+#joiningbtn:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    background-color:#7d75da;
+  }
+#leavebtn{
+  background-color: #f03c5a; /* Green */
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+#leavebtn:hover{
+    background-color: red;
+}
