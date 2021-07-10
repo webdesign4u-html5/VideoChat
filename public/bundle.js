@@ -7530,8 +7530,10 @@ function config (name) {
 let Peer = require('simple-peer')
 let socket = io()
 const video = document.querySelector('video')
+const filter = document.querySelector('#filter')
 const checkboxTheme = document.querySelector('#theme')
 let client = {}
+let currfilter;
 //get stream
 navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     .then(stream => {
@@ -7539,8 +7541,14 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         video.srcObject = stream
         video.play()
 
-        //used to initialize a peer
-
+        filter.addEventListener('change', (event) => {
+          currfilter = event.target.value
+          video.style.filter = currfilter
+          SendFilter(currfilter)
+          event.preventDefault
+      })
+      
+        
         let videomute=document.querySelector('#vidbutton')
         videomute.addEventListener('click', () => {
           if(stream.getVideoTracks()[0].enabled){
@@ -7553,11 +7561,31 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             }
         }
         )
+        let audiomute=document.querySelector('#mutemic')
+        audiomute.addEventListener('click', () => {
+            if(stream.getAudioTracks()[0].enabled){
+            stream.getAudioTracks()[0].enabled= !(stream.getAudioTracks()[0].enabled);
+            document.getElementById('mutemic').innerHTML = '<i class="fas fa-microphone-slash"></i>';
+            }
+            else{
+            stream.getAudioTracks()[0].enabled= !(stream.getAudioTracks()[0].enabled);
+            document.getElementById('mutemic').innerHTML = '<i class="fas fa-microphone"></i>';
+            }
+        }
+        )
+      
+         //used to initialize a peer
         function InitPeer(type) {
             let peer = new Peer({ initiator: (type == 'init') ? true : false, stream: stream, trickle: false })
             peer.on('stream', function (stream) {
                 CreateVideo(stream)
             })
+
+            peer.on('data', function (data) {
+              let decodedData = new TextDecoder('utf-8').decode(data)
+              let peervideo = document.querySelector('#peerVideo')
+              peervideo.style.filter = decodedData
+          })
             return peer
         }
 
@@ -7570,6 +7598,7 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
                     socket.emit('Offer', data)
                 }
             })
+            
             client.peer = peer
         }
 
@@ -7597,7 +7626,6 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             video.setAttribute('class', 'embed-responsive-item')
             document.querySelector('#peerDiv').appendChild(video)
             video.play()
-            //wait for 1 sec
   
 
             muteaudio.addEventListener('click', () => {
@@ -7617,26 +7645,27 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             document.write('Session Active. Please come back later')
         }
 
+        function SendFilter(filter) {
+          if (client.peer) {
+              client.peer.send(filter)
+          }
+      }
 
         function RemovePeer() {
             document.getElementById("peerVideo").remove();
-            document.getElementById("muteText").remove();
             if (client.peer) {
                 client.peer.destroy()
             }
         }
 
         socket.on('BackOffer', FrontAnswer)
-        socket.on('BackAnswer', SignalAnswer)
-        socket.on('SessionActive', SessionActive)
         socket.on('CreatePeer', MakePeer)
         socket.on('Disconnect', RemovePeer)
+        socket.on('BackAnswer', SignalAnswer)
+        socket.on('SessionActive', SessionActive)
 
     })
     .catch(err => document.write(err))
-
-    
-
 
 checkboxTheme.addEventListener('click', () => {
     if (checkboxTheme.checked == true) {
@@ -7654,6 +7683,8 @@ checkboxTheme.addEventListener('click', () => {
     }
 }
 )
+
+
 
 
 

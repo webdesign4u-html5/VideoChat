@@ -26,7 +26,7 @@ video {
 }
 
 .h-90 {
-    height: 90% !important;
+    height: 83% !important;
 }
 
 .h-10 {
@@ -66,12 +66,23 @@ input[type=checkbox]:checked + label {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
     background-color:#7d75da;
   }
+  button{
+    background-color: #0c0e0d;
+  border: none;
+  color: white;
+  padding :5px;
+}
 #leavebtn{
   background-color: #f03c5a; /* Green */
   color: white;
   text-decoration: none;
-  font-size: 18px;
+  font-size: 16px;
+  padding :5px 7px;
+  margin-bottom:3px;;
 }
 #leavebtn:hover{
     background-color: red;
+}
+#mutemic{
+    padding:5px 8px;
 }

@@ -2,8 +2,10 @@
 let Peer = require('simple-peer')
 let socket = io()
 const video = document.querySelector('video')
-const checkboxTheme = document.querySelector('#theme')
+const filter = document.querySelector('#filter')
+const checkboxMode = document.querySelector('#theme')
 let client = {}
+let currfilter
 
 navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     .then(stream => {
@@ -11,7 +13,13 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         video.srcObject= stream
         video.play()
 
-        //used to initialize a peer
+
+        filter.addEventListener('change', (event) => {
+            currfilter = event.target.value
+            video.style.filter = currfilter
+            SendFilter(currfilter)
+            event.preventDefault
+        })
 
         let videomute=document.querySelector('#vidbutton')
         videomute.addEventListener('click', () => {
@@ -25,11 +33,32 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             }
         }
         )
+        let audiomute=document.querySelector('#mutemic')
+        audiomute.addEventListener('click', () => {
+            if(stream.getAudioTracks()[0].enabled){
+            stream.getAudioTracks()[0].enabled= !(stream.getAudioTracks()[0].enabled);
+            document.getElementById('mutemic').innerHTML = '<i class="fas fa-microphone-slash"></i>';
+            }
+            else{
+            stream.getAudioTracks()[0].enabled= !(stream.getAudioTracks()[0].enabled);
+            document.getElementById('mutemic').innerHTML = '<i class="fas fa-microphone"></i>';
+            }
+        }
+        )
+       
+
+        //used to initialize a peer
         function InitPeer(type) {
             let peer = new Peer({ initiator: (type == 'init') ? true : false, stream: stream, trickle: false })
             peer.on('stream', function (stream) {
                 CreateVideo(stream)
             })
+            peer.on('data', function (data) {
+                let decodedData = new TextDecoder('utf-8').decode(data)
+                let peervideo = document.querySelector('#peerVideo')
+                peervideo.style.filter = decodedData
+            })
+             
             return peer
         }
 
@@ -91,11 +120,16 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
 
         function RemovePeer() {
             document.getElementById("peerVideo").remove();
-            document.getElementById("muteText").remove();
             if (client.peer) {
                 client.peer.destroy()
             }
 
+        }
+         
+        function SendFilter(filter) {
+            if (client.peer) {
+                client.peer.send(filter)
+            }
         }
 
         socket.on('BackOffer', FrontAnswer)
@@ -109,19 +143,12 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
    
     
 
-checkboxTheme.addEventListener('click', () => {
+checkboxMode.addEventListener('click', () => {
     if (checkboxTheme.checked == true) {
         document.body.style.backgroundColor = '#212529'
-        if (document.querySelector('#muteText')) {
-            document.querySelector('#muteText').style.color = "#fff"
-        }
-
     }
     else {
         document.body.style.backgroundColor = '#fff'
-        if (document.querySelector('#muteText')) {
-            document.querySelector('#muteText').style.color = "#212529"
-        }
     }
 }
 )

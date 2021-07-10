@@ -2,23 +2,10 @@
 <head>
     <title>Clone Video Chat App</title>
     <script>
-        function pageRedirect() {
+        function Redirect() {
             location.replace("ending.html")
         }      
-        function removeVIdeo(videoId){
-  	    var video = document.querySelector(videoId);
-        var togglemic = document.querySelector("#mutemic");
-         if(video.muted==true){
-           video.muted = false;
-           togglemic.innerHTML = '<i class="fas fa-microphone"></i>';
-         }
-           else{
-           video.muted=true;
-           togglemic.innerHTML = '<i class="fas fa-microphone-slash"></i>';
-           }
-        }
-        
-    </script> 
+	</script>
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://kit.fontawesome.com/e8ebafaba4.js" crossorigin="anonymous"></script>
@@ -33,10 +20,18 @@
     <div class="container-fluid">
         <div class="row h-11 w-110">
             <div class="col">
-                <div class="float-right mt-2">
+                <select id="filter" class="w-90 bg-dark text-light ml-1 mt-1 select font-weight-bold border">
+                    <option value="none">Filters(Normal)</option>
+                    <option value="grayscale(100%)">B & W</option>
+                    <option value="contrast(150%)">Contrast</option>
+                    <option value="blur(20px)">Blur</option>
+                </select>
+            </div>
+            <div class="col">
+                <div class="float-right mt-1">
                     <input class="form-check-input" type="checkbox" id="theme">
                     <label class="form-check-label" for="theme">
-                        Dark Theme
+                        Dark Mode
                     </label>
                 </div>
             </div>
@@ -44,7 +39,7 @@
         <div class="row h-90 w-110">
             <div class="col-12 col-sm-6 d-flex justify-content-center">
                 <div  class="embed-responsive embed-responsive-16by9">
-                    <video id="my-video" class="embed-responsive-item" ></video>
+                    <video id="my-video" class="embed-responsive-item" muted></video>
                 </div>
             </div>
             <div class="col-12 col-sm-6 d-flex justify-content-center">
@@ -55,18 +50,20 @@
         <div id="bottomline" class="row h-3 w-110">
             <div class="col">
                 <div class="float-left mt-2">
-                    <button type="button" id="mutemic" onclick="removeVIdeo('#my-video');" ><i class="fas fa-microphone"></i></button>
-                    <button type="button" id= "muteaudio" ><i class="fas fa-volume-up"></i></button>
-                    <button type="button" id="vidbutton" > <i class="fas fa-video"></i></button>
+                    <button type="button" id="mutemic" title="Mute Mic"><i class="fas fa-microphone"></i></button>
+                    <button type="button" id= "muteaudio" title="Mute Peer"><i class="fas fa-volume-up"></i></button>
+                    <button type="button" id="vidbutton" title="Mute Video"> <i class="fas fa-video"></i></button>
                 </div>
             </div>
             <div class="col">
                 <div class="float-right mt-2">
-                    <button id="leavebtn" type="button" onclick="pageRedirect()"><i class="fa fa-close"></i></button>
+                    <button id="leavebtn" type="button" onclick="Redirect()" title="Leave Call"><i class="fa fa-phone-slash"></i></button>
                 </div>
             </div>
         </div>
     </div>
+
+    
     <script src="/socket.io/socket.io.js"></script>
     <script src="bundle.js"></script>
 </body>
