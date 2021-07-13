@@ -13,14 +13,15 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         video.srcObject= stream
         video.play()
 
-
+         //used to add filters
         filter.addEventListener('change', (event) => {
             currfilter = event.target.value
             video.style.filter = currfilter
             SendFilter(currfilter)
             event.preventDefault
         })
-
+    
+        //used to mute/unmute video 
         let videomute=document.querySelector('#vidbutton')
         videomute.addEventListener('click', () => {
             if(stream.getVideoTracks()[0].enabled){
@@ -33,6 +34,8 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             }
         }
         )
+    
+        //used to mute/unmute audio 
         let audiomute=document.querySelector('#mutemic')
         audiomute.addEventListener('click', () => {
             if(stream.getAudioTracks()[0].enabled){
@@ -98,7 +101,10 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             video.setAttribute('class', 'embed-responsive-item')
             document.querySelector('#peerDiv').appendChild(video)
             video.play()
+            
             //wait for 1 sec
+            //used for mute/unmute the peer
+            
             muteaudio.addEventListener('click', () => {
                 if (video.volume != 0){
                   video.volume = 0
@@ -113,11 +119,12 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
 
         }
 
+        //used for when third person try to join and two people are already in the meeting. 
         function SessionActive() {
             document.write('Session Active. Please come back later')
         }
 
-
+      
         function RemovePeer() {
             document.getElementById("peerVideo").remove();
             if (client.peer) {
@@ -142,6 +149,7 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     .catch(err => document.write(err))
    
     
+//used to change theme
 
 checkboxMode.addEventListener('click', () => {
     if (checkboxTheme.checked == true) {
