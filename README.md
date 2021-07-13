@@ -15,7 +15,6 @@ This web app connects video chat between two clients by using simple-peer.
 * Mute audio
 * Mute video
 * Mute microphone
-* Unlimited duration calls
 * Filters
 * Dark theme
 
